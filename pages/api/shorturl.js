@@ -28,14 +28,15 @@ export default async function handler(req, res) {
 
     // NHN Cloud ShortURL API 호출
     const response = await fetch('https://api-shorturl.nhncloudservice.com/open-api/v1.0/appkeys/zbY2gn8pOKyD8Lx4/urls', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        url: url,
-        domain: domain
-      })
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            url: url,
+            domain: domain,
+            endDateTime: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, -5) + 'Z'
+        })
     });
 
     const data = await response.json();
