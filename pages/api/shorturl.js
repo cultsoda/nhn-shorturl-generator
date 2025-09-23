@@ -26,8 +26,21 @@ export default async function handler(req, res) {
       });
     }
 
+    // 환경 변수에서 appkeys를 가져와 쉼표로 분리
+    const appkeys = process.env.NHN_SHORTURL_APPKEYS?.split(',').map(key => key.trim());
+
+    if (!appkeys || appkeys.length === 0) {
+      return res.status(500).json({
+        success: false,
+        error: 'Appkeys not configured in environment variables'
+      });
+    }
+
+    // 여러 appkey 중 하나를 무작위로 선택
+    const selectedAppkey = appkeys[Math.floor(Math.random() * appkeys.length)];
+
     // NHN Cloud ShortURL API 호출
-    const response = await fetch('https://api-shorturl.nhncloudservice.com/open-api/v1.0/appkeys/zbY2gn8pOKyD8Lx4/urls', {
+    const response = await fetch(`https://api-shorturl.nhncloudservice.com/open-api/v1.0/appkeys/${selectedAppkey}/urls`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
